@@ -7,6 +7,7 @@
               <img v-if="showLang(item.original_language)" :src="flag(item.original_language)" :alt="item.original_language">
               <span v-else>{{item.original_language}}</span>
           </li>
+          <li><img :src="poster(item.poster_path)" :alt="item.original_title || item.original_name"></li>
           <li>{{item.vote_average}}</li>
       </ul>
   </div>
@@ -28,6 +29,11 @@ methods: {
         if(lang == "en" || lang == "it"){
             return true;
         }
+    },
+    poster(img){
+        const baseUri = "https://image.tmdb.org/t/p/w500";
+        if(img == null) return "https://www.altavod.com/assets/images/poster-placeholder.png";
+        return `${baseUri + img}`;
     }
 }
 }
