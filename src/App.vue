@@ -1,17 +1,46 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <main>
+      <Search @research="searchTerm"/>
+      <Card :send-list="combineArr"/>
+    </main>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import axios from "axios";
+import Search from './components/Search.vue';
+import Card from './components/Card.vue';
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Search,
+    Card,
+  },
+  data(){
+    return {
+      movies:[],
+      series:[],
+      baseUri:"https://api.themoviedb.org/3",
+      api: "40b3803735afda675d9d9ea1398ce89e",
+    }
+  },
+  methods: {
+    searchTerm(query){
+      if(!query) this.list = [];
+      this.fetchApi(query, "/search/movie", "movies");
+      this.fetchApi(query, "/search/tv", "series");
+      
+    },
+    fetchApi(query, endpoint, arr){
+      axios.get(`${this.baseUri}${endpoint}?api_key=${this.api}&query=${query}`).then((res)=>
+        this[arr] = res.data.results);
+    }
+  },
+  computed: {
+    combineArr(){
+      return [...this.movies, ...this.series];
+    }
   }
 }
 </script>
@@ -24,5 +53,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  ul {
+    list-style: none;
+  } 
 }
 </style>
