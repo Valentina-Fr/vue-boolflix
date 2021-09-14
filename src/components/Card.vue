@@ -8,7 +8,11 @@
               <span v-else>{{item.original_language}}</span>
           </li>
           <li><img :src="poster(item.poster_path)" :alt="item.original_title || item.original_name"></li>
-          <li>{{item.vote_average}}</li>
+          <li>{{rating(item.vote_average)}} 
+              <i v-for="number in 5" :key="number" 
+              class="fa-star"
+              :class="number <= rating(item.vote_average)? 'fas' : 'far'"></i>
+          </li>
       </ul>
   </div>
 </template>
@@ -34,8 +38,11 @@ methods: {
         const baseUri = "https://image.tmdb.org/t/p/w500";
         if(img == null) return "https://www.altavod.com/assets/images/poster-placeholder.png";
         return `${baseUri + img}`;
-    }
-}
+    },
+    rating(vote){
+        return Math.ceil(vote / 2);
+    },
+},
 }
 </script>
 
