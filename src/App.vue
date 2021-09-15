@@ -1,8 +1,12 @@
 <template>
   <div id="app">
+    <header class="d-flex justify-content-between align-items-center px-2">
+      <h1 class="text-danger">Boolflix</h1>
+      <Search @research="searchTerm" placeholder="Cerca"/>
+    </header>
     <main>
-      <Search @research="searchTerm"/>
-      <Card :send-list="combineArr"/>
+      <Section :list="movies" title="Movies" id="movies"/>
+      <Section :list="series" title="Series" id="series"/>
     </main>
   </div>
 </template>
@@ -10,12 +14,12 @@
 <script>
 import axios from "axios";
 import Search from './components/Search.vue';
-import Card from './components/Card.vue';
+import Section from './components/Section.vue';
 export default {
   name: 'App',
   components: {
     Search,
-    Card,
+    Section
   },
   data(){
     return {
@@ -37,24 +41,10 @@ export default {
         this[arr] = res.data.results);
     }
   },
-  computed: {
-    combineArr(){
-      return [...this.movies, ...this.series];
-    }
-  }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-  ul {
-    list-style: none;
-  } 
-}
+@import '~bootstrap/scss/bootstrap.scss';
+@import './scss/style.scss';
 </style>

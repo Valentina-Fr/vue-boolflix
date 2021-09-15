@@ -1,26 +1,26 @@
 <template>
-  <div>
-      <ul v-for="item in sendList" :key="item.id">
-          <li>{{item.title || item.name}}</li>
-          <li>{{item.original_title || item.original_name}}</li>
-          <li>
-              <img v-if="showLang(item.original_language)" :src="flag(item.original_language)" :alt="item.original_language">
+      <div class="card">
+          <img class="img-fluid poster" :src="poster(item.poster_path)" :alt="item.original_title || item.original_name">
+         <ul>
+          <li class="none title">{{item.title || item.name}}</li>
+          <li class="none w-25 py-1">
+              <img class="img-fluid" v-if="showLang(item.original_language)" :src="flag(item.original_language)" :alt="item.original_language">
               <span v-else>{{item.original_language}}</span>
           </li>
-          <li><img :src="poster(item.poster_path)" :alt="item.original_title || item.original_name"></li>
-          <li>{{rating(item.vote_average)}} 
+          <li class="none original-title">{{item.original_title || item.original_name}}</li>
+          <li class="none rating">
               <i v-for="number in 5" :key="number" 
               class="fa-star"
-              :class="number <= rating(item.vote_average)? 'fas' : 'far'"></i>
+              :class="number <= rating? 'fas' : 'far'"></i>
           </li>
       </ul>
-  </div>
+        </div>
 </template>
 
 <script>
 export default {
 name: 'Card',
-props:['sendList'],
+props:['item'],
 methods: {
     flag(lang){
         if(lang == "en"){
@@ -35,17 +35,41 @@ methods: {
         }
     },
     poster(img){
-        const baseUri = "https://image.tmdb.org/t/p/w500";
+        const baseUri = "https://image.tmdb.org/t/p/w342";
         if(img == null) return "https://www.altavod.com/assets/images/poster-placeholder.png";
         return `${baseUri + img}`;
     },
-    rating(vote){
-        return Math.ceil(vote / 2);
-    },
 },
+computed: {
+    rating(){
+        return Math.ceil(this.item.vote_average / 2);
+    },
+}
 }
 </script>
 
-<style>
-
+<style scoped lang="scss">
+    .none {
+        display: none;
+    }
+    .card:hover {
+        .poster {
+            filter: grayscale(100%);
+            opacity: 0.5;
+        }
+        .none {
+            display: block;
+        }
+    }
+    .card {
+        position: relative;
+        font-size: 0.8rem;
+    }
+    ul {
+        position: absolute;
+        padding: 8px;
+    }
+    .title, .original-title {
+        font-weight: 700;
+    }
 </style>
